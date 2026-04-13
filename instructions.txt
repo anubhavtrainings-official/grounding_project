@@ -1,0 +1,6 @@
+1. Login to BAS tool - https://sap-build-hana-cloud.eu10cf.applicationstudio.cloud.sap/index.html
+2. Create a Dev space with Python tools of HANA cloud Development
+3. cf login --sso
+4. cf create-service-key default_aicore anubhav-si-sk
+5. Create virtual enviornment for pyhton by F1 > Python Create Enviornment >  3.13.1
+6. Run bash - pip install "sap-ai-sdk-gen[all]"
