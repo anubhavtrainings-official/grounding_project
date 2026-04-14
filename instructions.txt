@@ -4,3 +4,71 @@
 4. cf create-service-key default_aicore anubhav-si-sk
 5. Create virtual enviornment for pyhton by F1 > Python Create Enviornment >  3.13.1
 6. Run bash - pip install "sap-ai-sdk-gen[all]"
+--source /home/user/projects/grounding_project/.venv/bin/activate
+
+==> Store our PDF document to Amazon S3 Bucket which is part of SAP BTP - doc store
+1. Create Service key for object store - cf create-service-key bsr-os bsr-sk
+2. Read Service key cf service-key bsr-os bsr-sk
+{
+  "credentials": {
+    "access_key_id": "<your key>",
+    "bucket": "hcp-ba99cc70-f979-44c2-aa4e-d1f3496d6023",
+    "host": "s3-eu-central-1.amazonaws.com",
+    "region": "eu-central-1",
+    "secret_access_key": "<your key>",
+    "uri": "s3://:0MH%@s3-eu-central-1.amazonaws.com/hcp-ba99cc70-f979-44c2-aa4e-d1f3496d6023",
+    "username": "<your username>"
+  }
+}
+3. Make a postman GET https://{bucket}.{host}/documents
+    Authorization as AWSSignature and pass access key and secret key
+4. PUT https://{bucket}.{host}/documents add Binary data with PDF
+
+==> Create a Pipeline (AI Launchpad or Postman tool)
+1. Retrieve the Service key of AI Core
+cf service-key default_aicore anubhav-si-sk
+
+{
+  "credentials": {
+    "appname": "1b884034-65ff-4e7f-9eb5-3a75a12a45ec!b598040|aicore!b540",
+    "clientid": "sb-1b884034-65ff-4e7f-9eb5-3a75a12a45ec!b598040|aicore!b540",
+    "clientsecret": "ecd58af9-9a4c-4837-bed0-60fb889b209f$BYyyfFX7N-lv0cezBEl_sWmbZ9am48YL_vPYsU-7fQ0=",
+    "credential-type": "binding-secret",
+    "identityzone": "sap-core-ai-chatbot-eu10-eqvsquev",
+    "identityzoneid": "556dd226-a6de-4fd8-ba3e-b74c937c000b",
+    "serviceurls": {
+      "AI_API_URL": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com"
+    },
+    "url": "https://sap-core-ai-chatbot-eu10-eqvsquev.authentication.eu10.hana.ondemand.com"
+  }
+}
+
+REPOSITORY_OBJECT_ID = d7834fe4-83f0-4d6e-8583-1be833a2ca0b
+
+==> Configure AI Core service key details in config.json file in .aicore dir under home so our wf can connect 
+    remotely from BAS tool to Ai core service
+
+1. Go to home directory cd ../../../
+2. mkdir .aicore
+3. cd .aicore
+4. touch config.json
+5. vim config.json
+Press INSERT, right click to paste
+{
+    "AICORE_AUTH_URL": "https://sap-core-ai-chatbot-eu10-eqvsquev.authentication.eu10.hana.ondemand.com",
+    "AICORE_CLIENT_ID": "sb-1b884034-65ff-4e7f-9eb5-3a75a12a45ec!b598040|aicore!b540",
+    "AICORE_CLIENT_SECRET": "ecd58af9-9a4c-4837-bed0-60fb889b209f$BYyyfFX7N-lv0cezBEl_sWmbZ9am48YL_vPYsU-7fQ0=",
+    "AICORE_BASE_URL": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com",
+    "AICORE_RESOURCE_GROUP": "doc-grounding"
+}
+
+:wq to save and quit
+
+template
+{
+    "AICORE_AUTH_URL": service_key_data.get("credentials")["url"],
+    "AICORE_CLIENT_ID": service_key_data.get("credentials")["clientid"],
+    "AICORE_CLIENT_SECRET": service_key_data.get("credentials")["clientsecret"],
+    "AICORE_BASE_URL": service_key_data.get("credentials")["serviceurls"]["AI_API_URL"],
+    "AICORE_RESOURCE_GROUP": "doc-grounding"
+}

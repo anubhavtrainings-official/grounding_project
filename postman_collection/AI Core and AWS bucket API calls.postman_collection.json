@@ -1,0 +1,744 @@
+{
+  "info": {
+    "_postman_id": "59df7bfa-df95-4caa-83b4-667824539ccc",
+    "name": "AI Core and AWS bucket API calls",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "14691148"
+  },
+  "item": [
+    {
+      "name": "Create document in s3 bucket with object store btp",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "awsv4",
+          "awsv4": [
+            {
+              "key": "region",
+              "value": "eu-central-1",
+              "type": "string"
+            },
+            {
+              "key": "secretKey",
+              "value": "<YOUR_AWS_SECRET_KEY>",
+              "type": "string"
+            },
+            {
+              "key": "accessKey",
+              "value": "<YOUR_AWS_ACCESS_KEY>",
+              "type": "string"
+            },
+            {
+              "key": "service",
+              "value": "s3",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "file",
+          "file": {
+            "src": "<YOUR_LOCAL_FILE_PATH>"
+          }
+        },
+        "url": {
+          "raw": "https://<YOUR_S3_BUCKET_NAME>.s3-eu-central-1.amazonaws.com/documents/mydoc.pdf",
+          "protocol": "https",
+          "host": [
+            "<YOUR_S3_BUCKET_NAME>",
+            "s3-eu-central-1",
+            "amazonaws",
+            "com"
+          ],
+          "path": [
+            "documents",
+            "mydoc.pdf"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All deployments",
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/lm/deployments",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "lm",
+            "deployments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Scenarios",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let response = pm.response.json();\r",
+              "\r",
+              "// extract all scenario IDs\r",
+              "let scenarioIds = response.resources.map(r => r.id);\r",
+              "\r",
+              "// store as array\r",
+              "pm.environment.set(\"scenarioIds\", JSON.stringify(scenarioIds));\r",
+              "\r",
+              "console.log(scenarioIds)\r",
+              "// initialize index\r",
+              "pm.environment.set(\"index\", 0);\r",
+              "\r",
+              "// initialize result array\r",
+              "pm.environment.set(\"allExecutables\", JSON.stringify([]));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/lm/scenarios",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "lm",
+            "scenarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Object store secrets",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log(pm.environment.get(\"scenarioIds\"))\r",
+              "let scenarioIds = JSON.parse(pm.environment.get(\"scenarioIds\"));\r",
+              "let index = pm.environment.get(\"index\");\r",
+              "\r",
+              "pm.environment.set(\"currentScenario\", scenarioIds[index]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/admin/ObjectStoreSecrets",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "admin",
+            "ObjectStoreSecrets"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Object store secrets Copy",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log(pm.environment.get(\"scenarioIds\"))\r",
+              "let scenarioIds = JSON.parse(pm.environment.get(\"scenarioIds\"));\r",
+              "let index = pm.environment.get(\"index\");\r",
+              "\r",
+              "pm.environment.set(\"currentScenario\", scenarioIds[index]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"name\": \"myobjectstore\",\r\n   \"type\": \"S3\",\r\n   \"bucket\": \"<YOUR_S3_BUCKET_NAME>\",\r\n   \"endpoint\": \"s3-eu-central-1.amazonaws.com\",\r\n   \"region\": \"eu-central-1\",\r\n   \"pathPrefix\": \"s3-eu-central-1.amazonaws.com/<YOUR_S3_BUCKET_NAME>/\",\r\n   \"verifyssl\": \"1\",\r\n   \"usehttps\": \"1\",\r\n   \"data\": {}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/admin/ObjectStoreSecrets",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "admin",
+            "ObjectStoreSecrets"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Gronding Pipeline",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log(pm.environment.get(\"scenarioIds\"))\r",
+              "let scenarioIds = JSON.parse(pm.environment.get(\"scenarioIds\"));\r",
+              "let index = pm.environment.get(\"index\");\r",
+              "\r",
+              "pm.environment.set(\"currentScenario\", scenarioIds[index]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/lm/executables/<YOUR_EXECUTABLE_ID>",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "lm",
+            "executables",
+            "<YOUR_EXECUTABLE_ID>"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get pipelines (executables) of all scenarios",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.log(pm.environment.get(\"scenarioIds\"))\r",
+              "let scenarioIds = JSON.parse(pm.environment.get(\"scenarioIds\"));\r",
+              "let index = pm.environment.get(\"index\");\r",
+              "\r",
+              "pm.environment.set(\"currentScenario\", scenarioIds[index]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let response = pm.response.json();\r",
+              "let allExecutables = JSON.parse(pm.environment.get(\"allExecutables\"));\r",
+              "\r",
+              "// append current result\r",
+              "allExecutables.push({\r",
+              "    scenario: pm.environment.get(\"currentScenario\"),\r",
+              "    executables: response.resources\r",
+              "});\r",
+              "\r",
+              "// save back\r",
+              "pm.environment.set(\"allExecutables\", JSON.stringify(allExecutables));\r",
+              "\r",
+              "// move to next index\r",
+              "let scenarioIds = JSON.parse(pm.environment.get(\"scenarioIds\"));\r",
+              "let index = parseInt(pm.environment.get(\"index\"));\r",
+              "\r",
+              "index++;\r",
+              "pm.environment.set(\"index\", index);\r",
+              "\r",
+              "// loop control\r",
+              "if (index < scenarioIds.length) {\r",
+              "    postman.setNextRequest(\"Get Executables\"); // EXACT request name\r",
+              "} else {\r",
+              "    postman.setNextRequest(null);\r",
+              "\r",
+              "    console.log(\"FINAL RESULT:\");\r",
+              "    console.log(allExecutables);\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "oauth2",
+          "oauth2": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "string"
+            },
+            {
+              "key": "clientSecret",
+              "value": "<YOUR_CLIENT_SECRET>",
+              "type": "string"
+            },
+            {
+              "key": "clientId",
+              "value": "<YOUR_CLIENT_ID>",
+              "type": "string"
+            },
+            {
+              "key": "accessTokenUrl",
+              "value": "<YOUR_SAP_AUTH_URL>/oauth/token",
+              "type": "string"
+            },
+            {
+              "key": "tokenName",
+              "value": "Anubhav",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "<YOUR_PASSWORD>",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "<YOUR_USERNAME>",
+              "type": "string"
+            },
+            {
+              "key": "scope",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "key": "client_authentication",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "AI-Resource-Group",
+            "value": "doc-grounding",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://api.ai.prod.eu-central-1.aws.ml.hana.ondemand.com/v2/lm/scenarios/{{currentScenario}}/executables",
+          "protocol": "https",
+          "host": [
+            "api",
+            "ai",
+            "prod",
+            "eu-central-1",
+            "aws",
+            "ml",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "v2",
+            "lm",
+            "scenarios",
+            "{{currentScenario}}",
+            "executables"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
