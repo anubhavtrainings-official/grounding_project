@@ -72,3 +72,5 @@ template
     "AICORE_BASE_URL": service_key_data.get("credentials")["serviceurls"]["AI_API_URL"],
     "AICORE_RESOURCE_GROUP": "doc-grounding"
 }
+
+--------------Create a social welfare agent using Crew AI
